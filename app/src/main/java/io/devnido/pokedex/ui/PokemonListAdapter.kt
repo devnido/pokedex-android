@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import io.devnido.pokedex.R
-import io.devnido.pokedex.base.BaseViewHolder
+import io.devnido.pokedex.core.BaseViewHolder
 import io.devnido.pokedex.domain.entities.Pokemon
 import kotlinx.android.synthetic.main.pokemon_card.view.*
 
-class MainAdapter(
+class PokemonListAdapter(
     private val context: Context,
     private val pokemonList: List<Pokemon>,
     private val itemClickListener: OnPokemonClickListener

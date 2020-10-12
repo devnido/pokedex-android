@@ -2,10 +2,12 @@ package io.devnido.pokedex.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.devnido.pokedex.data.PokemonRepository
+import io.devnido.pokedex.domain.usecases.GetPokemon
+import io.devnido.pokedex.domain.usecases.GetPokemons
 
-class ViewModelFactory(private val pokemonRepository: PokemonRepository): ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(PokemonRepository::class.java).newInstance(pokemonRepository)
-    }
+class ViewModelFactory(private val getPokemons: GetPokemons,private val getPokemon: GetPokemon ): ViewModelProvider.Factory{
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T = PokemonViewModel(getPokemons,getPokemon) as T
 }
+
+
+

@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#536DFE</color>
+    <color name="colorTextWhite">#FFFFFF</color>
+    <color name="colorTextBlack">#000000</color>
+    <color name="colorPrimaryOverlay">#62388E3C</color>
+    <color name="colorBgDefault">#a1a1a1</color>
+
+    <color name="pokemonTypeNormal">#A8A77A</color>
+    <color name="pokemonTypeFire">#EE8130</color>
+    <color name="pokemonTypeWater">#6390F0</color>
+    <color name="pokemonTypeElectric">#F7D02C</color>
+    <color name="pokemonTypeGrass">#7AC74C</color>
+    <color name="pokemonTypeIce">#96D9D6</color>
+    <color name="pokemonTypeFighting">#C22E28</color>
+    <color name="pokemonTypePoison">#A33EA1</color>
+    <color name="pokemonTypeGround">#E2BF65</color>
+    <color name="pokemonTypeFlying">#A98FF3</color>
+    <color name="pokemonTypePsychic">#F95587</color>
+    <color name="pokemonTypeBug">#A6B91A</color>
+    <color name="pokemonTypeRock">#B6A136</color>
+    <color name="pokemonTypeGhost">#735797</color>
+    <color name="pokemonTypeDragon">#6F35FC</color>
+    <color name="pokemonTypeDark">#705746</color>
+    <color name="pokemonTypeSteel">#B7B7CE</color>
+    <color name="pokemonTypeFairy">#D685AD</color>
+
 </resources>

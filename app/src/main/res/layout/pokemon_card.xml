@@ -9,7 +9,7 @@
         android:id="@+id/imgPokemon"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/bg_list_pokemon_card"
         android:layout_gravity="center_horizontal"/>
 
     <TextView
@@ -18,6 +18,8 @@
         android:layout_height="wrap_content"
         tools:text="Pokemon"
         android:textAllCaps="true"
+        android:textSize="13sp"
+        android:textColor="@color/colorTextWhite"
         android:gravity="center_horizontal"/>
 
 

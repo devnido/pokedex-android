@@ -1,23 +1,30 @@
 package io.devnido.pokedex.domain.entities
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Pokemon(
-    val number: Int,
-    val name: String,
-    val images: Images,
-    val types: Types
-)
+    var number: Int,
+    var name: String,
+    var images: Images,
+    var types: Types? = null
+): Parcelable
 
+@Parcelize
 data class Images(
-    val defaultFront:String,
-    val defaultBack:String = "",
-    val shinyFront:String = "",
-    val shinyBack:String = ""
-)
+    var defaultFront:String,
+    var defaultBack:String = "",
+    var shinyFront:String = "",
+    var shinyBack:String = "",
+    var large:String = ""
+): Parcelable
 
+@Parcelize
 data class Types(
-    val first:String,
-    val second:String = ""
-)
+    var first:String,
+    var second:String = ""
+): Parcelable
 
 
 

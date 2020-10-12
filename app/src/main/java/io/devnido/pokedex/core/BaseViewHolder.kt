@@ -1,4 +1,4 @@
-package io.devnido.pokedex.base
+package io.devnido.pokedex.core
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

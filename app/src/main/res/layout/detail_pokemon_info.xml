@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_detail_pokemon_info"
+        android:padding="15dp"
+        android:weightSum="2">
+        <TableRow>
+            <TextView
+                android:layout_weight="1"
+                tools:text="Number"
+                style="@style/InfoTitle"
+                />
+            <TextView
+                android:layout_weight="1"
+                tools:text="Base Exp"
+                style="@style/InfoTitle" />
+        </TableRow>
+        <TableRow >
+            <TextView
+                android:id="@+id/info_number"
+                android:layout_weight="1"
+                tools:text="25"
+                style="@style/InfoValue" />
+            <TextView
+                android:id="@+id/info_exp_base"
+                android:layout_weight="1"
+                tools:text="112"
+                style="@style/InfoValue"  />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_weight="1"
+                tools:text="Weight"
+                style="@style/InfoTitle"
+                />
+            <TextView
+                android:layout_weight="1"
+                tools:text="Height"
+                style="@style/InfoTitle" />
+        </TableRow>
+        <TableRow >
+            <TextView
+                android:id="@+id/info_weight"
+                android:layout_weight="1"
+                tools:text="6 kg"
+                style="@style/InfoValue" />
+            <TextView
+                android:id="@+id/info_height"
+                android:layout_weight="1"
+                tools:text="0.4 m"
+                style="@style/InfoValue"  />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_weight="2"
+                tools:text="Abilities"
+                style="@style/InfoTitle"
+                />
+
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/info_abilities"
+                android:layout_weight="2"
+                tools:text="Static, Lightning-Rod"
+                style="@style/InfoValue" />
+
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
