@@ -19,6 +19,8 @@ import io.devnido.pokedex.domain.usecases.GetPokemons
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
 import io.devnido.pokedex.ui.viewmodels.ViewModelFactory
 import io.devnido.pokedex.core.Result
+import io.devnido.pokedex.core.hide
+import io.devnido.pokedex.core.show
 
 class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
 
@@ -51,22 +53,22 @@ class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
         getPokemonList()
     }
 
-
     private fun getPokemonList(){
         pokemonViewModel.getPokemonList().observe(viewLifecycleOwner,Observer{result->
             when(result){
+                is Result.Loading -> {
+                    binding.progressList.show()
+                }
                 is Result.Success -> {
                     @Suppress("UNCHECKED_CAST")
                     val pokemonList:List<Pokemon> = result.data as List<Pokemon>
-
-                    pokemonList.map {
-                        Log.d("TAG_POKEMON",it.name)
-                    }
-
-                    binding.recyclerviewPokemon.adapter = PokemonListAdapter(requireContext(), pokemonList, this)
+                    binding.progressList.hide()
+                    setAdapter(pokemonList)
+                    binding.recyclerviewPokemon.show()
                 }
                 is Result.Error -> {
                     val exception: Exception = result.exception
+                    binding.progressList.hide()
                     Toast.makeText(requireContext(),exception.message,Toast.LENGTH_SHORT).show()
                 }
             }
@@ -75,6 +77,11 @@ class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
 
     private fun setupRecyclerView() {
         binding.recyclerviewPokemon.layoutManager = GridLayoutManager(requireContext(),3)
+    }
+
+    private fun setAdapter(pokemonList:List<Pokemon>){
+        binding.recyclerviewPokemon.adapter = PokemonListAdapter(requireContext(), pokemonList, this)
+        binding.recyclerviewPokemon.adapter?.notifyDataSetChanged()
     }
 
     override fun onPokemonClick(pokemon: Pokemon, position: Int) {

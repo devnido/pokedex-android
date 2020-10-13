@@ -5,8 +5,12 @@ import com.google.gson.annotations.SerializedName
 data class PokemonDetailResponse(
     @SerializedName("name") var name:String,
     @SerializedName("order") var order:Int,
+    @SerializedName("base_experience") var baseExperience:Int,
+    @SerializedName("height") var height:Int,
+    @SerializedName("weight") var weight:Int,
     @SerializedName("sprites") var sprites: Sprites,
-    @SerializedName("types") var types:List<Type>
+    @SerializedName("types") var types:List<Type>,
+    @SerializedName("abilities") var abilities:List<Ability>
 )
 
 data class Sprites(
@@ -24,4 +28,11 @@ data class TypeItem(
     @SerializedName("name") var name:String
 )
 
+data class Ability(
+    @SerializedName("ability") var ability: AbilityItem
+)
+
+data class AbilityItem(
+    @SerializedName("name") var name:String
+)
 

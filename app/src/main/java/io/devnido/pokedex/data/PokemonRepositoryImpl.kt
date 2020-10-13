@@ -14,7 +14,7 @@ class PokemonRepositoryImpl: PokemonRepository {
     private val pokeApiRequests: PokeApiRequests = PokeApiRequests(pokeApiService)
     private val mapper:ApiToDomainMapper = ApiToDomainMapper()
 
-    val ITEMS_PER_PAGE = 151
+    val ITEMS_PER_PAGE = 251
 
     override suspend fun getPokemonList(): List<Pokemon> {
 
@@ -27,8 +27,7 @@ class PokemonRepositoryImpl: PokemonRepository {
 
         val pokemonDetailResponse = pokeApiRequests.getPokemon(number)
 
-        Log.d("TAG_POKEMON", pokemonDetailResponse.toString())
-
         return mapper.mapPokemonDetailResponseToDomain(pokemonDetailResponse)
+
     }
 }

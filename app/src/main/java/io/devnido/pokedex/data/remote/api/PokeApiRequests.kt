@@ -26,8 +26,6 @@ class PokeApiRequests(private val pokeApiService: PokeApiService) {
 
         // TODO: validar que el request fue exitoso, en caso contrario lanzar un error personalizado
 
-        Log.d("TAG_POKEMON", response.body().toString())
-
         return response.body()!!
     }
 

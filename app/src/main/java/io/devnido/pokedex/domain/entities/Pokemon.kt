@@ -7,8 +7,12 @@ import kotlinx.android.parcel.Parcelize
 data class Pokemon(
     var number: Int,
     var name: String,
+    var baseExperience: Int? = 0,
+    var weight: Float? = 0f,
+    var height: Float? = 0f,
     var images: Images,
-    var types: Types? = null
+    var types: Types? = null,
+    var abilities: List<Ability>? = null
 ): Parcelable
 
 @Parcelize
@@ -22,8 +26,14 @@ data class Images(
 
 @Parcelize
 data class Types(
-    var first:String,
-    var second:String = ""
+    var first:String? = "",
+    var second:String? = ""
+): Parcelable
+
+
+@Parcelize
+data class Ability(
+    var name:String = ""
 ): Parcelable
 
 

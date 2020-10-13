@@ -8,6 +8,8 @@
     </style>
 
     <style name="InfoTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorTextWhite</item>
@@ -15,6 +17,8 @@
     </style>
 
     <style name="InfoValue" parent="InfoTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorTextBlack</item>
         <item name="android:textStyle">normal</item>
         <item name="android:paddingBottom">5dp</item>

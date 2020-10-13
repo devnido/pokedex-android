@@ -30,9 +30,8 @@ class PokemonViewModel(
     fun getPokemonDetail(number: Int) = liveData(Dispatchers.IO) {
         emit(Result.Loading())
         try {
-            val wea = getPokemon(number)
-            Log.d("TAG_POKEMON_VM", wea.toString())
-            emit(Result.Success(wea))
+            val pokemon = getPokemon(number)
+            emit(Result.Success(pokemon))
         }catch (e: Exception){
             emit(Result.Error<Exception>(e))
         }

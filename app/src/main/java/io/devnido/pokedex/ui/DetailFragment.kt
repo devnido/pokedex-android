@@ -1,8 +1,7 @@
 package io.devnido.pokedex.ui
 
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
-import android.graphics.Color
+import android.annotation.SuppressLint
+import android.graphics.*
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,7 +12,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import io.devnido.pokedex.R
 import io.devnido.pokedex.data.PokemonRepositoryImpl
 import io.devnido.pokedex.databinding.FragmentDetailBinding
 import io.devnido.pokedex.domain.entities.Pokemon
@@ -22,8 +20,10 @@ import io.devnido.pokedex.domain.usecases.GetPokemons
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
 import io.devnido.pokedex.ui.viewmodels.ViewModelFactory
 import io.devnido.pokedex.core.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.devnido.pokedex.core.Utils
+import io.devnido.pokedex.core.hide
+import io.devnido.pokedex.core.show
+
 
 class DetailFragment : Fragment() {
 
@@ -73,17 +73,44 @@ class DetailFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupDetailUI(){
         with(binding){
 
-            pokemon.types?.first?.let {
-                containerPokemonTypes.txtFirstType.text = it
-                //containerPokemonTypes.txtFirstType.setBackgroundColor(R.color.${it})
-                containerPokemonTypes.txtFirstType.background.colorFilter = BlendModeColorFilter(
-                    R.color.pokemonTypeFire, BlendMode.SRC_ATOP)
+            containerDetail.show()
 
+            Log.d("TAG_POKEMON_FRAGMENT",pokemon.toString())
+            pokemon.types?.first?.let {type ->
+                containerPokemonTypes.txtFirstType.text = type
+                val color = Utils.getColorByPokemonType(context,type)
+                color?.let {
+                    containerPokemonTypes.txtFirstType.background.colorFilter = PorterDuffColorFilter(color,PorterDuff.Mode.SRC)
+                }
             }
 
+            pokemon.types?.second?.let {type ->
+                containerPokemonTypes.txtSecondType.visibility = View.VISIBLE
+                containerPokemonTypes.txtSecondType.text = type
+                val color = Utils.getColorByPokemonType(context,type)
+                color?.let {
+                    containerPokemonTypes.txtSecondType.background.colorFilter = PorterDuffColorFilter(color,PorterDuff.Mode.SRC)
+                }
+            }
+
+            containerPokemonInfo.infoOrder.text = pokemon.number.toString()
+            containerPokemonInfo.infoExpBase.text = pokemon.baseExperience.toString()
+
+            pokemon.height?.let {
+                containerPokemonInfo.infoHeight.text = "$it m"
+            }
+
+            pokemon.weight?.let {
+                containerPokemonInfo.infoWeight.text = "$it kg"
+            }
+
+            pokemon.abilities?.let {
+               containerPokemonInfo.infoAbilities.text = it.joinToString(separator = ", ",transform = {ability->ability.name})
+            }
         }
 
 
@@ -93,21 +120,25 @@ class DetailFragment : Fragment() {
         Log.d("TAG_POKEMON_FD",pokemon.name)
         pokemonViewModel.getPokemonDetail(pokemon.number).observe(viewLifecycleOwner, Observer { result ->
             when(result){
+                is Result.Loading -> {
+                    binding.progressDetailInfo.show()
+                }
                 is Result.Success -> {
                     @Suppress("UNCHECKED_CAST")
-                    val pokemonDetail:Pokemon = result.data as Pokemon
+                    pokemon = result.data as Pokemon
 
 
-                    Log.d("TAG_POKEMON",pokemonDetail.name)
-                    Log.d("TAG_POKEMON",pokemonDetail.types?.first  ?: "No first type")
-                    Log.d("TAG_POKEMON",pokemonDetail.types?.second ?: "No second type")
+                    Log.d("TAG_POKEMON",pokemon.name)
+                    Log.d("TAG_POKEMON",pokemon.types?.first  ?: "No first type")
+                    Log.d("TAG_POKEMON",pokemon.types?.second ?: "No second type")
 
-
-
+                    binding.progressDetailInfo.hide()
+                    setupDetailUI()
 
                 }
                 is Result.Error -> {
                     val exception: Exception = result.exception
+                    binding.progressDetailInfo.hide()
                     Toast.makeText(requireContext(),exception.message, Toast.LENGTH_SHORT).show()
                 }
             }

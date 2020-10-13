@@ -17,11 +17,20 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryOverlay"/>
 
+    <ProgressBar
+        android:id="@+id/progress_list"
+        android:padding="30dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="150dp"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewPokemon"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 
 

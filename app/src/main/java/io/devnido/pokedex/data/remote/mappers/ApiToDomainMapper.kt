@@ -3,6 +3,7 @@ package io.devnido.pokedex.data.remote.mappers
 import io.devnido.pokedex.data.remote.PokeApiService
 import io.devnido.pokedex.data.remote.models.PokemonDetailResponse
 import io.devnido.pokedex.data.remote.models.PokemonListResponse
+import io.devnido.pokedex.domain.entities.Ability
 import io.devnido.pokedex.domain.entities.Images
 import io.devnido.pokedex.domain.entities.Pokemon
 import io.devnido.pokedex.domain.entities.Types
@@ -10,9 +11,13 @@ import io.devnido.pokedex.domain.entities.Types
 class ApiToDomainMapper {
 
     fun mapPokemonDetailResponseToDomain(pokemonDetailResponse: PokemonDetailResponse): Pokemon {
+
         return Pokemon(
             name = pokemonDetailResponse.name,
             number = pokemonDetailResponse.order,
+            baseExperience = pokemonDetailResponse.baseExperience,
+            height = pokemonDetailResponse.height.toFloat()/10,
+            weight = pokemonDetailResponse.weight.toFloat()/10,
             images = Images(
                 defaultFront = pokemonDetailResponse.sprites.frontDefault,
                 defaultBack = pokemonDetailResponse.sprites.backDefault,
@@ -20,10 +25,14 @@ class ApiToDomainMapper {
                 shinyBack = pokemonDetailResponse.sprites.backShiny
             ),
             types = Types(
-                first = pokemonDetailResponse.types[0].type.name,
-                second = pokemonDetailResponse.types[1].type.name
-            )
+                first = pokemonDetailResponse.types.getOrNull(0)?.type?.name,
+                second = pokemonDetailResponse.types.getOrNull(1)?.type?.name
+            ),
+            abilities = pokemonDetailResponse.abilities.map {
+                Ability(name = it.ability.name)
+            }
         )
+
     }
 
     fun mapPokemonListResponseToDomain(pokemonListResponse: PokemonListResponse): MutableList<Pokemon> {
