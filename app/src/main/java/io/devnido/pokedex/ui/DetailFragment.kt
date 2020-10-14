@@ -23,6 +23,7 @@ import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.Utils
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
+import io.devnido.pokedex.data.local.database.AppDatabase
 
 
 class DetailFragment : Fragment() {
@@ -35,10 +36,10 @@ class DetailFragment : Fragment() {
     private val pokemonViewModel by viewModels<PokemonViewModel> {
         ViewModelFactory(
             GetPokemons(
-                PokemonRepositoryImpl()
+                PokemonRepositoryImpl(AppDatabase.getDatabase(requireActivity().applicationContext))
             ),
             GetPokemon(
-                PokemonRepositoryImpl()
+                PokemonRepositoryImpl(AppDatabase.getDatabase(requireActivity().applicationContext))
             )
         )
     }
@@ -62,18 +63,19 @@ class DetailFragment : Fragment() {
         getPokemonDetail()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupInitialUI(){
         with(binding){
 
             Glide.with(requireContext()).load(pokemon.images.large).centerInside().into(imgPokemon)
 
             txtNamePokemon.text = pokemon.name
-            txtNumberPokemon.text = "# ${pokemon.number}"
+            txtIdPokemon.text = "# ${pokemon.id}"
 
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "LongLogTag")
     private fun setupDetailUI(){
         with(binding){
 
@@ -89,6 +91,7 @@ class DetailFragment : Fragment() {
             }
 
             pokemon.types?.second?.let {type ->
+                Log.d("TAG_POKEMON_FRAGMENT_SECOND_TYPE",type)
                 containerPokemonTypes.txtSecondType.visibility = View.VISIBLE
                 containerPokemonTypes.txtSecondType.text = type
                 val color = Utils.getColorByPokemonType(context,type)
@@ -97,7 +100,7 @@ class DetailFragment : Fragment() {
                 }
             }
 
-            containerPokemonInfo.infoOrder.text = pokemon.number.toString()
+            containerPokemonInfo.infoOrder.text = pokemon.order.toString()
             containerPokemonInfo.infoExpBase.text = pokemon.baseExperience.toString()
 
             pokemon.height?.let {
@@ -118,7 +121,7 @@ class DetailFragment : Fragment() {
 
     private fun getPokemonDetail(){
         Log.d("TAG_POKEMON_FD",pokemon.name)
-        pokemonViewModel.getPokemonDetail(pokemon.number).observe(viewLifecycleOwner, Observer { result ->
+        pokemonViewModel.getPokemonDetail(pokemon.id).observe(viewLifecycleOwner, Observer { result ->
             when(result){
                 is Result.Loading -> {
                     binding.progressDetailInfo.show()

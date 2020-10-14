@@ -3,6 +3,7 @@ package io.devnido.pokedex.data.remote.models
 import com.google.gson.annotations.SerializedName
 
 data class PokemonDetailResponse(
+    @SerializedName("id") var id:Int,
     @SerializedName("name") var name:String,
     @SerializedName("order") var order:Int,
     @SerializedName("base_experience") var baseExperience:Int,

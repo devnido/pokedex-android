@@ -21,6 +21,7 @@ import io.devnido.pokedex.ui.viewmodels.ViewModelFactory
 import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
+import io.devnido.pokedex.data.local.database.AppDatabase
 
 class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
 
@@ -30,10 +31,10 @@ class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
     private val pokemonViewModel by viewModels<PokemonViewModel> {
         ViewModelFactory(
             GetPokemons(
-                PokemonRepositoryImpl()
+                PokemonRepositoryImpl(AppDatabase.getDatabase(requireActivity().applicationContext))
             ),
             GetPokemon(
-                PokemonRepositoryImpl()
+                PokemonRepositoryImpl(AppDatabase.getDatabase(requireActivity().applicationContext))
             )
         )
     }

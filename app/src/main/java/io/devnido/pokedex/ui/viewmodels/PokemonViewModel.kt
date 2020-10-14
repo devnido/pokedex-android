@@ -27,14 +27,15 @@ class PokemonViewModel(
 
     }
 
-    fun getPokemonDetail(number: Int) = liveData(Dispatchers.IO) {
+    fun getPokemonDetail(id: Int) = liveData(Dispatchers.IO) {
         emit(Result.Loading())
         try {
-            val pokemon = getPokemon(number)
+            val pokemon = getPokemon(id)
             emit(Result.Success(pokemon))
         }catch (e: Exception){
             emit(Result.Error<Exception>(e))
         }
     }
+
 
 }

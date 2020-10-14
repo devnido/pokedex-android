@@ -5,7 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Pokemon(
-    var number: Int,
+    var id: Int,
+    var order: Int? = 0,
     var name: String,
     var baseExperience: Int? = 0,
     var weight: Float? = 0f,

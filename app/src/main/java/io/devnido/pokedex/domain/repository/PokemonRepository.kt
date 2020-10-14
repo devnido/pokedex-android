@@ -6,8 +6,9 @@ interface PokemonRepository {
 
     suspend fun getPokemonList():List<Pokemon>
 
-    suspend fun getPokemonDetail(number:Int):Pokemon
+    suspend fun getPokemonDetail(id:Int):Pokemon
 
+    suspend fun saveDetailPokemon(pokemon: Pokemon)
 
 
 }
