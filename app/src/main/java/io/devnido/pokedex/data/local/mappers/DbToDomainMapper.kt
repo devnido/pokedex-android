@@ -3,10 +3,7 @@ package io.devnido.pokedex.data.local.mappers
 import io.devnido.pokedex.data.local.models.PokemonEntity
 import io.devnido.pokedex.data.remote.PokeApiService
 import io.devnido.pokedex.data.remote.models.PokemonDetailResponse
-import io.devnido.pokedex.domain.entities.Ability
-import io.devnido.pokedex.domain.entities.Images
-import io.devnido.pokedex.domain.entities.Pokemon
-import io.devnido.pokedex.domain.entities.Types
+import io.devnido.pokedex.domain.entities.*
 
 class DbToDomainMapper {
 
@@ -32,7 +29,8 @@ class DbToDomainMapper {
                 first = pokemonEntity.firstType,
                 second = pokemonEntity.secondType
             ),
-            abilities = pokemonEntity.abilities?.split(",")?.map { Ability(name = it.trim()) }
+            abilities = pokemonEntity.abilities?.split(",")?.map { Ability(name = it.trim()) },
+            stats = pokemonEntity.stats?.split(";")?.map { Stat(name = it.split(",")[0].trim(),base_value = it.split(",")[1].toInt()) }
         )
 
     }
@@ -53,7 +51,8 @@ class DbToDomainMapper {
             imgLarge = pokemon.images.large,
             firstType = pokemon.types?.first?:"",
             secondType = pokemon.types?.second,
-            abilities = pokemon.abilities?.joinToString(separator = ", ",transform = {ability->ability.name})
+            abilities = pokemon.abilities?.joinToString(separator = ", ",transform = {ability->ability.name}),
+            stats = pokemon.stats?.joinToString (separator = "; ",transform = {stat->"${stat.name},${stat.base_value}"})
         )
 
     }

@@ -3,10 +3,7 @@ package io.devnido.pokedex.data.remote.mappers
 import io.devnido.pokedex.data.remote.PokeApiService
 import io.devnido.pokedex.data.remote.models.PokemonDetailResponse
 import io.devnido.pokedex.data.remote.models.PokemonListResponse
-import io.devnido.pokedex.domain.entities.Ability
-import io.devnido.pokedex.domain.entities.Images
-import io.devnido.pokedex.domain.entities.Pokemon
-import io.devnido.pokedex.domain.entities.Types
+import io.devnido.pokedex.domain.entities.*
 
 class ApiToDomainMapper {
     private val spritesBaseUrl = PokeApiService.POKEAPI_SPRITES_BASE_URL
@@ -35,6 +32,9 @@ class ApiToDomainMapper {
             ),
             abilities = pokemonDetailResponse.abilities.map {
                 Ability(name = it.ability.name)
+            },
+            stats = pokemonDetailResponse.stats.map {
+                Stat(name = it.stat.name,base_value = it.base)
             }
         )
 

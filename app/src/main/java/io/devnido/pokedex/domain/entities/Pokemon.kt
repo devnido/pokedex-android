@@ -13,7 +13,8 @@ data class Pokemon(
     var height: Float? = 0f,
     var images: Images,
     var types: Types? = null,
-    var abilities: List<Ability>? = null
+    var abilities: List<Ability>? = null,
+    var stats: List<Stat>? = null
 ): Parcelable
 
 @Parcelize
@@ -35,6 +36,12 @@ data class Types(
 @Parcelize
 data class Ability(
     var name:String = ""
+): Parcelable
+
+@Parcelize
+data class Stat(
+    var name:String = "",
+    var base_value:Int = 0
 ): Parcelable
 
 

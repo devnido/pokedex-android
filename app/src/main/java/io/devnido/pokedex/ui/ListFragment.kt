@@ -1,7 +1,6 @@
 package io.devnido.pokedex.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +20,7 @@ import io.devnido.pokedex.ui.viewmodels.ViewModelFactory
 import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
-import io.devnido.pokedex.data.local.database.AppDatabase
+import io.devnido.pokedex.data.local.database.PokemonDatabase
 
 class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
 
@@ -31,10 +30,10 @@ class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
     private val pokemonViewModel by viewModels<PokemonViewModel> {
         ViewModelFactory(
             GetPokemons(
-                PokemonRepositoryImpl(AppDatabase.getDatabase(requireActivity().applicationContext))
+                PokemonRepositoryImpl(PokemonDatabase.getDatabase(requireActivity().applicationContext))
             ),
             GetPokemon(
-                PokemonRepositoryImpl(AppDatabase.getDatabase(requireActivity().applicationContext))
+                PokemonRepositoryImpl(PokemonDatabase.getDatabase(requireActivity().applicationContext))
             )
         )
     }

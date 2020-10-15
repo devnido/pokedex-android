@@ -11,7 +11,8 @@ data class PokemonDetailResponse(
     @SerializedName("weight") var weight:Int,
     @SerializedName("sprites") var sprites: Sprites,
     @SerializedName("types") var types:List<Type>,
-    @SerializedName("abilities") var abilities:List<Ability>
+    @SerializedName("abilities") var abilities:List<Ability>,
+    @SerializedName("stats") var stats:List<Stat>
 )
 
 data class Sprites(
@@ -34,6 +35,15 @@ data class Ability(
 )
 
 data class AbilityItem(
+    @SerializedName("name") var name:String
+)
+
+data class Stat(
+    @SerializedName("stat") var stat:StatItem,
+    @SerializedName("base_stat") var base:Int
+)
+
+data class StatItem(
     @SerializedName("name") var name:String
 )
 

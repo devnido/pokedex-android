@@ -59,14 +59,7 @@
                 android:id="@+id/container_pokemon_info"
                 layout="@layout/detail_pokemon_info"/>
 
-
-
         </LinearLayout>
-
-
-
-
-
 
 
 

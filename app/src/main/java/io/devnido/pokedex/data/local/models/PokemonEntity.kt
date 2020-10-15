@@ -33,6 +33,8 @@ data class PokemonEntity(
     @ColumnInfo(name = "second_type")
     val secondType: String?,
     @ColumnInfo(name = "abilities")
-    val abilities: String?
+    val abilities: String?,
+    @ColumnInfo(name = "stats")
+    val stats: String?
 
 )
