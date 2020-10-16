@@ -59,6 +59,14 @@
                 android:id="@+id/container_pokemon_info"
                 layout="@layout/detail_pokemon_info"/>
 
+            <include
+                android:id="@+id/container_pokemon_chart"
+                layout="@layout/detail_pokemon_chart"/>
+
+            <include
+                android:id="@+id/container_pokemon_sprites"
+                layout="@layout/detail_pokemon_sprites"/>
+
         </LinearLayout>
 
 

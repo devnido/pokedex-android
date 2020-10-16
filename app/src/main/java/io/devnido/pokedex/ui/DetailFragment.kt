@@ -2,7 +2,6 @@ package io.devnido.pokedex.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
@@ -12,23 +11,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.anychart.AnyChart
+import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.chart.common.dataentry.ValueDataEntry
+import com.anychart.charts.Radar
+import com.anychart.charts.Radar.instantiate
+import com.anychart.core.axes.Radar.instantiate
+import com.anychart.core.radar.series.Line
+import com.anychart.data.Mapping
+import com.anychart.data.Set
+import com.anychart.enums.Align
+import com.anychart.enums.MarkerType
 import com.bumptech.glide.Glide
 import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.Utils
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
-import io.devnido.pokedex.data.PokemonRepositoryImpl
-import io.devnido.pokedex.data.local.database.PokemonDatabase
 import io.devnido.pokedex.databinding.FragmentDetailBinding
 import io.devnido.pokedex.domain.entities.Pokemon
-import io.devnido.pokedex.domain.usecases.GetPokemon
-import io.devnido.pokedex.domain.usecases.GetPokemons
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
-import io.devnido.pokedex.ui.viewmodels.ViewModelFactory
+import kotlinx.android.synthetic.main.pokemon_card.view.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -74,6 +80,7 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupInitialUI()
         getPokemonDetail()
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -135,6 +142,10 @@ class DetailFragment : Fragment() {
                    separator = ", ",
                    transform = { ability -> ability.name })
             }
+
+
+            setupChart()
+            setupSprites()
         }
 
 
@@ -167,6 +178,54 @@ class DetailFragment : Fragment() {
             })
     }
 
+    private fun setupChart(){
+        val anyChartView: AnyChartView = binding.containerPokemonChart.anyChartView
+
+        val radar: Radar = AnyChart.radar()
+
+        radar.title("Base stats for ${pokemon.name}")
+
+        radar.yScale().minimum(0.0)
+        radar.yScale().minimumGap(0.0)
+        radar.yScale().ticks().interval(20.0)
+
+        radar.xAxis().labels().padding(5.0, 5.0, 5.0, 5.0)
+
+        radar.legend()
+            .align(Align.CENTER)
+            .enabled(true)
+
+        val data: MutableList<DataEntry> = ArrayList()
+        pokemon.stats?.map {
+            data.add(ValueDataEntry(it.name, it.base_value))
+        }
+
+
+        val set: Set = Set.instantiate()
+        set.data(data)
+        val baseStats: Mapping = set.mapAs("{ x: 'x', value: 'value' }")
+
+        val baseStatsLine: Line = radar.line(baseStats)
+        baseStatsLine.name("Stats")
+        baseStatsLine.markers()
+            .enabled(true)
+            .type(MarkerType.CIRCLE)
+            .size(3.0)
+
+
+        radar.tooltip().format("Value: {%Value}")
+
+        anyChartView.setChart(radar)
+    }
+
+    fun setupSprites(){
+        with(binding.containerPokemonSprites){
+            Glide.with(requireContext()).load(pokemon.images.defaultFront).centerInside().into(imgSpriteDefaultFront)
+            Glide.with(requireContext()).load(pokemon.images.defaultBack).centerInside().into(imgSpriteDefaultBack)
+            Glide.with(requireContext()).load(pokemon.images.shinyFront).centerInside().into(imgSpriteShinyFront)
+            Glide.with(requireContext()).load(pokemon.images.shinyBack).centerInside().into(imgSpriteShinyBack)
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
