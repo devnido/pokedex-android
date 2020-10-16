@@ -8,39 +8,69 @@
     <ImageView
         android:id="@+id/img_sprite_default_front"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         app:layout_constraintWidth_percent="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/img_sprite_default_back"
         app:layout_constraintTop_toTopOf="parent"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Front"
+        app:layout_constraintStart_toStartOf="@id/img_sprite_default_front"
+        app:layout_constraintEnd_toEndOf="@id/img_sprite_default_front"
+        app:layout_constraintTop_toBottomOf="@id/img_sprite_default_front"
+        />
 
     <ImageView
         android:id="@+id/img_sprite_default_back"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         app:layout_constraintWidth_percent="0.22"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/img_sprite_default_front"
         app:layout_constraintEnd_toStartOf="@id/img_sprite_shiny_front"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        app:layout_constraintStart_toStartOf="@id/img_sprite_default_back"
+        app:layout_constraintEnd_toEndOf="@id/img_sprite_default_back"
+        app:layout_constraintTop_toBottomOf="@id/img_sprite_default_back"
+        />
 
     <ImageView
         android:id="@+id/img_sprite_shiny_front"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         app:layout_constraintWidth_percent="0.22"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/img_sprite_default_back"
         app:layout_constraintEnd_toStartOf="@id/img_sprite_shiny_back"/>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shiny Front"
+        app:layout_constraintStart_toStartOf="@id/img_sprite_shiny_front"
+        app:layout_constraintEnd_toEndOf="@id/img_sprite_shiny_front"
+        app:layout_constraintTop_toBottomOf="@id/img_sprite_shiny_front"
+        />
     <ImageView
         android:id="@+id/img_sprite_shiny_back"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         app:layout_constraintWidth_percent="0.22"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/img_sprite_shiny_front"
         app:layout_constraintEnd_toEndOf="parent"
         />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shiny Back"
+        app:layout_constraintStart_toStartOf="@id/img_sprite_shiny_back"
+        app:layout_constraintEnd_toEndOf="@id/img_sprite_shiny_back"
+        app:layout_constraintTop_toBottomOf="@id/img_sprite_shiny_back"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

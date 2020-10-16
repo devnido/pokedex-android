@@ -1,6 +1,7 @@
 package io.devnido.pokedex.data
 
 import android.util.Log
+import io.devnido.pokedex.data.local.database.PokemonDao
 import io.devnido.pokedex.data.local.database.PokemonDatabase
 import io.devnido.pokedex.data.local.mappers.DbToDomainMapper
 import io.devnido.pokedex.data.local.models.PokemonEntity
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class PokemonRepositoryImpl @Inject constructor(
     private val pokeApiRequests: PokeApiRequests,
-    private val appDatabase: PokemonDatabase
+    private val pokemonDao: PokemonDao
 ) : PokemonRepository {
 
     private val itemsPerPage = 251
@@ -48,12 +49,12 @@ class PokemonRepositoryImpl @Inject constructor(
 
         val pokemonEntity: PokemonEntity = DbToDomainMapper.mapDomainToPokemonDb(pokemon)
 
-        appDatabase.pokemonDao().insertPokemon(pokemonEntity)
+        pokemonDao.insertPokemon(pokemonEntity)
     }
 
     private suspend fun getPokemonFromDb(id: Int): Pokemon? {
 
-        val pokemonEntity = appDatabase.pokemonDao().getPokemon(id)
+        val pokemonEntity = pokemonDao.getPokemon(id)
         return if (pokemonEntity != null) {
             val pokemon = DbToDomainMapper.mapPokemonDbToDomain(pokemonEntity)
             pokemon
@@ -65,7 +66,7 @@ class PokemonRepositoryImpl @Inject constructor(
     private suspend fun savePokemonInDb(pokemon: Pokemon) {
 
         val pokemonEntity = DbToDomainMapper.mapDomainToPokemonDb(pokemon)
-        appDatabase.pokemonDao().insertPokemon(pokemonEntity)
+        pokemonDao.insertPokemon(pokemonEntity)
 
     }
 }

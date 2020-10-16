@@ -17,8 +17,6 @@ class PokemonViewModel @Inject constructor(
         private val getPokemon: GetPokemon
     ) : ViewModel() {
 
-    private var pokemon = MutableLiveData<Pokemon>()
-
     fun getPokemonList() = liveData(Dispatchers.IO) {
         emit(Result.Loading())
         try {

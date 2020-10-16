@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
@@ -32,6 +33,7 @@ import io.devnido.pokedex.core.Utils
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
 import io.devnido.pokedex.databinding.FragmentDetailBinding
+import io.devnido.pokedex.di.components.DaggerAppComponent
 import io.devnido.pokedex.domain.entities.Pokemon
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
 import kotlinx.android.synthetic.main.pokemon_card.view.*
@@ -43,6 +45,10 @@ class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
+
+    private val safeArg by navArgs<DetailFragmentArgs>()
+
+
 
     private lateinit var pokemon: Pokemon
 
@@ -59,7 +65,8 @@ class DetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pokemon = DetailFragmentArgs.fromBundle(requireArguments()).pokemon
+
+        pokemon = safeArg.pokemon
 
         pokemonViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
@@ -182,9 +189,7 @@ class DetailFragment : Fragment() {
         val anyChartView: AnyChartView = binding.containerPokemonChart.anyChartView
 
         val radar: Radar = AnyChart.radar()
-
-        radar.title("Base stats for ${pokemon.name}")
-
+        
         radar.yScale().minimum(0.0)
         radar.yScale().minimumGap(0.0)
         radar.yScale().ticks().interval(20.0)
@@ -218,7 +223,7 @@ class DetailFragment : Fragment() {
         anyChartView.setChart(radar)
     }
 
-    fun setupSprites(){
+    private fun setupSprites(){
         with(binding.containerPokemonSprites){
             Glide.with(requireContext()).load(pokemon.images.defaultFront).centerInside().into(imgSpriteDefaultFront)
             Glide.with(requireContext()).load(pokemon.images.defaultBack).centerInside().into(imgSpriteDefaultBack)
