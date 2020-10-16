@@ -1,6 +1,5 @@
 package io.devnido.pokedex.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -9,8 +8,11 @@ import io.devnido.pokedex.domain.usecases.GetPokemon
 import io.devnido.pokedex.domain.usecases.GetPokemons
 import io.devnido.pokedex.core.Result
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PokemonViewModel(
+@Singleton
+class PokemonViewModel @Inject constructor(
         private val getPokemons: GetPokemons,
         private val getPokemon: GetPokemon
     ) : ViewModel() {

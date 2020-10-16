@@ -8,8 +8,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PokeApiRequests(private val pokeApiService: PokeApiService) {
+@Singleton
+class PokeApiRequests @Inject constructor(private val pokeApiService: PokeApiService) {
 
     suspend fun getPokemonList(limit:Int,offset:Int): PokemonListResponse {
 

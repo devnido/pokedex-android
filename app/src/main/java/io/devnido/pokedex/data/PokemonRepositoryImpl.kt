@@ -10,13 +10,14 @@ import io.devnido.pokedex.data.remote.api.PokeApiRequests
 import io.devnido.pokedex.data.remote.mappers.ApiToDomainMapper
 import io.devnido.pokedex.domain.repository.PokemonRepository
 import io.devnido.pokedex.domain.entities.Pokemon
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PokemonRepositoryImpl(private val appDatabase: PokemonDatabase) : PokemonRepository {
-
-    private val pokeApiService: PokeApiService = RestClient.build()
-    private val pokeApiRequests: PokeApiRequests = PokeApiRequests(pokeApiService)
-    private val apiMapper: ApiToDomainMapper = ApiToDomainMapper()
-    private val dbMapper: DbToDomainMapper = DbToDomainMapper()
+@Singleton
+class PokemonRepositoryImpl @Inject constructor(
+    private val pokeApiRequests: PokeApiRequests,
+    private val appDatabase: PokemonDatabase
+) : PokemonRepository {
 
     private val itemsPerPage = 251
 
@@ -24,7 +25,7 @@ class PokemonRepositoryImpl(private val appDatabase: PokemonDatabase) : PokemonR
 
         val pokemonListResponse = pokeApiRequests.getPokemonList(itemsPerPage, 0)
 
-        return apiMapper.mapPokemonListResponseToDomain(pokemonListResponse).toList()
+        return ApiToDomainMapper.mapPokemonListResponseToDomain(pokemonListResponse).toList()
     }
 
     override suspend fun getPokemonDetail(id: Int): Pokemon {
@@ -36,7 +37,7 @@ class PokemonRepositoryImpl(private val appDatabase: PokemonDatabase) : PokemonR
         } else {
             val pokemonDetailResponse = pokeApiRequests.getPokemon(id)
 
-            pokemon = apiMapper.mapPokemonDetailResponseToDomain(pokemonDetailResponse)
+            pokemon = ApiToDomainMapper.mapPokemonDetailResponseToDomain(pokemonDetailResponse)
             savePokemonInDb(pokemon)
 
             return pokemon
@@ -45,7 +46,7 @@ class PokemonRepositoryImpl(private val appDatabase: PokemonDatabase) : PokemonR
 
     override suspend fun saveDetailPokemon(pokemon: Pokemon) {
 
-        val pokemonEntity: PokemonEntity = dbMapper.mapDomainToPokemonDb(pokemon)
+        val pokemonEntity: PokemonEntity = DbToDomainMapper.mapDomainToPokemonDb(pokemon)
 
         appDatabase.pokemonDao().insertPokemon(pokemonEntity)
     }
@@ -54,7 +55,7 @@ class PokemonRepositoryImpl(private val appDatabase: PokemonDatabase) : PokemonR
 
         val pokemonEntity = appDatabase.pokemonDao().getPokemon(id)
         return if (pokemonEntity != null) {
-            val pokemon = dbMapper.mapPokemonDbToDomain(pokemonEntity)
+            val pokemon = DbToDomainMapper.mapPokemonDbToDomain(pokemonEntity)
             pokemon
         } else {
             null
@@ -63,7 +64,7 @@ class PokemonRepositoryImpl(private val appDatabase: PokemonDatabase) : PokemonR
 
     private suspend fun savePokemonInDb(pokemon: Pokemon) {
 
-        val pokemonEntity = dbMapper.mapDomainToPokemonDb(pokemon)
+        val pokemonEntity = DbToDomainMapper.mapDomainToPokemonDb(pokemon)
         appDatabase.pokemonDao().insertPokemon(pokemonEntity)
 
     }

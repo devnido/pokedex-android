@@ -1,6 +1,7 @@
 package io.devnido.pokedex.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -13,6 +14,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.Utils
@@ -26,6 +29,8 @@ import io.devnido.pokedex.domain.usecases.GetPokemon
 import io.devnido.pokedex.domain.usecases.GetPokemons
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
 import io.devnido.pokedex.ui.viewmodels.ViewModelFactory
+import javax.inject.Inject
+import javax.inject.Provider
 
 
 class DetailFragment : Fragment() {
@@ -35,20 +40,26 @@ class DetailFragment : Fragment() {
 
     private lateinit var pokemon: Pokemon
 
-    private val pokemonViewModel by viewModels<PokemonViewModel> {
-        ViewModelFactory(
-            GetPokemons(
-                PokemonRepositoryImpl(PokemonDatabase.getDatabase(requireActivity().applicationContext))
-            ),
-            GetPokemon(
-                PokemonRepositoryImpl(PokemonDatabase.getDatabase(requireActivity().applicationContext))
-            )
-        )
+    private lateinit var pokemonViewModel: PokemonViewModel
+
+    @Inject
+    lateinit var viewModelProvider: Provider<PokemonViewModel>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (activity as MainActivity).appComponent.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pokemon = DetailFragmentArgs.fromBundle(requireArguments()).pokemon
+
+        pokemonViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                viewModelProvider.get() as T
+        }).get(PokemonViewModel::class.java)
     }
 
     override fun onCreateView(

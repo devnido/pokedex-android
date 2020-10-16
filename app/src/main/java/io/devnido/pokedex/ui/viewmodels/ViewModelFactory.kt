@@ -4,10 +4,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.devnido.pokedex.domain.usecases.GetPokemon
 import io.devnido.pokedex.domain.usecases.GetPokemons
-@Suppress("UNCHECKED_CAST")
-class ViewModelFactory(private val getPokemons: GetPokemons,private val getPokemon: GetPokemon ): ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = PokemonViewModel(getPokemons,getPokemon) as T
-}
+import javax.inject.Inject
+import javax.inject.Provider
+import javax.inject.Singleton
 
+
+class ViewModelFactory @Inject constructor(private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>) :
+    ViewModelProvider.Factory {
+
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+
+        val creator = creators[modelClass] ?: creators.entries.firstOrNull {
+            modelClass.isAssignableFrom(it.key)
+        }?.value ?: throw IllegalArgumentException("Unknown model class $modelClass")
+        try {
+            @Suppress("UNCHECKED_CAST")
+            return creator.get() as T
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+}
 
 
