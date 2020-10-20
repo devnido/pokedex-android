@@ -7,24 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import io.devnido.pokedex.data.PokemonRepositoryImpl
 import io.devnido.pokedex.databinding.FragmentListBinding
 import io.devnido.pokedex.domain.entities.Pokemon
-import io.devnido.pokedex.domain.usecases.GetPokemon
-import io.devnido.pokedex.domain.usecases.GetPokemons
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
-import io.devnido.pokedex.ui.viewmodels.ViewModelFactory
 import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
-import io.devnido.pokedex.data.local.database.PokemonDatabase
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -66,30 +59,28 @@ class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        getPokemonList()
+        initObservers()
     }
 
-    private fun getPokemonList(){
-        pokemonViewModel.getPokemonList().observe(viewLifecycleOwner,Observer{result->
-            when(result){
-                is Result.Loading -> {
-                    binding.progressList.show()
-                }
-                is Result.Success -> {
-                    @Suppress("UNCHECKED_CAST")
-                    val pokemonList:List<Pokemon> = result.data as List<Pokemon>
-                    binding.progressList.hide()
-                    setAdapter(pokemonList)
-                    binding.recyclerviewPokemon.show()
-                }
-                is Result.Error -> {
-                    val exception: Exception = result.exception
-                    binding.progressList.hide()
-                    Toast.makeText(requireContext(),exception.message,Toast.LENGTH_SHORT).show()
-                }
+    private fun initObservers(){
+
+        pokemonViewModel.pokemonList.observe(viewLifecycleOwner, Observer {pokemonList->
+            setAdapter(pokemonList)
+            binding.recyclerviewPokemon.show()
+        })
+
+        pokemonViewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
+            if(isLoading) binding.progressList.show() else binding.progressList.hide()
+        })
+
+        pokemonViewModel.errorMessage.observe(viewLifecycleOwner, Observer { error ->
+            if (error != "") {
+                Toast.makeText(requireContext(), "Error: $error", Toast.LENGTH_SHORT).show()
             }
         })
+
     }
+
 
     private fun setupRecyclerView() {
         binding.recyclerviewPokemon.layoutManager = GridLayoutManager(requireContext(),3)

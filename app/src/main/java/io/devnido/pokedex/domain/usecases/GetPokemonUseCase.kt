@@ -6,6 +6,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetPokemon @Inject constructor(private val pokemonRepository: PokemonRepository) {
+class GetPokemonUseCase @Inject constructor(private val pokemonRepository: PokemonRepository) {
     suspend operator fun invoke(id:Int): Pokemon = pokemonRepository.getPokemonDetail(id)
 }
