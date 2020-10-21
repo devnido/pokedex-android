@@ -1,14 +1,11 @@
 package io.devnido.pokedex.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.*
 import io.devnido.pokedex.domain.usecases.GetPokemonUseCase
 import io.devnido.pokedex.domain.usecases.GetPokemonsUseCase
-import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.domain.entities.Pokemon
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
 class PokemonViewModel @Inject constructor(

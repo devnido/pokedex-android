@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import io.devnido.pokedex.databinding.FragmentListBinding
 import io.devnido.pokedex.domain.entities.Pokemon
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
-import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
 import javax.inject.Inject

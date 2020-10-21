@@ -1,12 +1,8 @@
 package io.devnido.pokedex.data
 
-import android.util.Log
 import io.devnido.pokedex.data.local.database.PokemonDao
-import io.devnido.pokedex.data.local.database.PokemonDatabase
 import io.devnido.pokedex.data.local.mappers.DbToDomainMapper
 import io.devnido.pokedex.data.local.models.PokemonEntity
-import io.devnido.pokedex.data.remote.PokeApiService
-import io.devnido.pokedex.data.remote.RestClient
 import io.devnido.pokedex.data.remote.api.PokeApiRequests
 import io.devnido.pokedex.data.remote.mappers.ApiToDomainMapper
 import io.devnido.pokedex.domain.repository.PokemonRepository
