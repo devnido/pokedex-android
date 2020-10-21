@@ -6,10 +6,13 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.marginEnd
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -20,23 +23,18 @@ import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.charts.Radar
-import com.anychart.charts.Radar.instantiate
-import com.anychart.core.axes.Radar.instantiate
 import com.anychart.core.radar.series.Line
 import com.anychart.data.Mapping
 import com.anychart.data.Set
 import com.anychart.enums.Align
 import com.anychart.enums.MarkerType
 import com.bumptech.glide.Glide
-import io.devnido.pokedex.core.Result
 import io.devnido.pokedex.core.Utils
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
 import io.devnido.pokedex.databinding.FragmentDetailBinding
-import io.devnido.pokedex.di.components.DaggerAppComponent
 import io.devnido.pokedex.domain.entities.Pokemon
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
-import kotlinx.android.synthetic.main.pokemon_card.view.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -47,8 +45,6 @@ class DetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val safeArg by navArgs<DetailFragmentArgs>()
-
-
 
     private lateinit var pokemon: Pokemon
 
@@ -80,19 +76,21 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupInitialUI()
-        getPokemonDetail()
+        initObservers()
+        getPokemonDetail(pokemon.id)
 
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupInitialUI(){
-        with(binding){
+    private fun setupInitialUI() {
+        with(binding) {
 
             Glide.with(requireContext()).load(pokemon.images.large).centerInside().into(imgPokemon)
 
@@ -102,34 +100,77 @@ class DetailFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n", "LongLogTag")
-    private fun setupDetailUI(){
-        with(binding){
+    private fun getPokemonDetail(id: Int) {
+        Log.d("TAG_POKEMON", id.toString())
+        pokemonViewModel.getPokemonDetail(id)
+    }
 
+    private fun initObservers() {
+
+        pokemonViewModel.selectedPokemon.observe(viewLifecycleOwner, Observer { selectedPokemon ->
+            Log.d("TAG_POKEMON_SELECT", selectedPokemon.toString())
+            setupDetailUI(selectedPokemon)
+        })
+
+        pokemonViewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
+            Log.d("TAG_POKEMON_LOADING", isLoading.toString())
+            with(binding) {
+                if (isLoading) progressDetailInfo.show() else progressDetailInfo.hide()
+            }
+        })
+
+        pokemonViewModel.errorMessage.observe(viewLifecycleOwner, Observer { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        })
+
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setupDetailUI(pokemon: Pokemon) {
+        with(binding) {
+
+            Log.d("TAG_POKEMON", "Detail")
             containerDetail.show()
 
-            Log.d("TAG_POKEMON_FRAGMENT", pokemon.toString())
             pokemon.types?.first?.let { type ->
                 containerPokemonTypes.txtFirstType.text = type
                 val color = Utils.getColorByPokemonType(context, type)
                 color?.let {
-                    containerPokemonTypes.txtFirstType.background.colorFilter = PorterDuffColorFilter(
-                        color,
-                        PorterDuff.Mode.SRC
-                    )
+                    containerPokemonTypes.txtFirstType.background.colorFilter =
+                        PorterDuffColorFilter( color, PorterDuff.Mode.SRC )
+                }
+
+                if (pokemon.types?.second.isNullOrBlank()) {
+
+                    val params =
+                        LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)
+
+                    containerPokemonTypes.txtFirstType.layoutParams = params
+
+                } else {
+
+                    val paramsTxtFirstType = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    paramsTxtFirstType.marginEnd = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
+                    containerPokemonTypes.txtFirstType.layoutParams = paramsTxtFirstType
+
+                    val paramsTxtSecondType = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    paramsTxtSecondType.marginStart = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
+                    containerPokemonTypes.txtSecondType.layoutParams = paramsTxtSecondType
+
                 }
             }
 
             pokemon.types?.second?.let { type ->
-                Log.d("TAG_POKEMON_FRAGMENT_SECOND_TYPE", type)
                 containerPokemonTypes.txtSecondType.visibility = View.VISIBLE
                 containerPokemonTypes.txtSecondType.text = type
                 val color = Utils.getColorByPokemonType(context, type)
                 color?.let {
-                    containerPokemonTypes.txtSecondType.background.colorFilter = PorterDuffColorFilter(
-                        color,
-                        PorterDuff.Mode.SRC
-                    )
+                    containerPokemonTypes.txtSecondType.background.colorFilter =
+                        PorterDuffColorFilter(
+                            color,
+                            PorterDuff.Mode.SRC
+                        )
                 }
             }
 
@@ -145,51 +186,24 @@ class DetailFragment : Fragment() {
             }
 
             pokemon.abilities?.let {
-               containerPokemonInfo.infoAbilities.text = it.joinToString(
-                   separator = ", ",
-                   transform = { ability -> ability.name })
+                containerPokemonInfo.infoAbilities.text = it.joinToString(
+                    separator = ", ",
+                    transform = { ability -> ability.name })
             }
 
 
-            setupChart()
-            setupSprites()
+            setupChart(pokemon)
+            setupSprites(pokemon)
         }
 
 
     }
 
-    private fun getPokemonDetail(){
-        Log.d("TAG_POKEMON_FD", pokemon.name)
-        pokemonViewModel.getPokemonDetail(pokemon.id).observe(
-            viewLifecycleOwner,
-            Observer { result ->
-                when (result) {
-                    is Result.Loading -> {
-                        binding.progressDetailInfo.show()
-                    }
-                    is Result.Success -> {
-                        @Suppress("UNCHECKED_CAST")
-                        pokemon = result.data as Pokemon
-
-                        binding.progressDetailInfo.hide()
-                        setupDetailUI()
-
-                    }
-                    is Result.Error -> {
-                        val exception: Exception = result.exception
-                        binding.progressDetailInfo.hide()
-                        Toast.makeText(requireContext(), exception.message, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            })
-    }
-
-    private fun setupChart(){
+    private fun setupChart(pokemon: Pokemon) {
         val anyChartView: AnyChartView = binding.containerPokemonChart.anyChartView
 
         val radar: Radar = AnyChart.radar()
-        
+
         radar.yScale().minimum(0.0)
         radar.yScale().minimumGap(0.0)
         radar.yScale().ticks().interval(20.0)
@@ -223,12 +237,16 @@ class DetailFragment : Fragment() {
         anyChartView.setChart(radar)
     }
 
-    private fun setupSprites(){
-        with(binding.containerPokemonSprites){
-            Glide.with(requireContext()).load(pokemon.images.defaultFront).centerInside().into(imgSpriteDefaultFront)
-            Glide.with(requireContext()).load(pokemon.images.defaultBack).centerInside().into(imgSpriteDefaultBack)
-            Glide.with(requireContext()).load(pokemon.images.shinyFront).centerInside().into(imgSpriteShinyFront)
-            Glide.with(requireContext()).load(pokemon.images.shinyBack).centerInside().into(imgSpriteShinyBack)
+    private fun setupSprites(pokemon: Pokemon) {
+        with(binding.containerPokemonSprites) {
+            Glide.with(requireContext()).load(pokemon.images.defaultFront).centerInside()
+                .into(imgSpriteDefaultFront)
+            Glide.with(requireContext()).load(pokemon.images.defaultBack).centerInside()
+                .into(imgSpriteDefaultBack)
+            Glide.with(requireContext()).load(pokemon.images.shinyFront).centerInside()
+                .into(imgSpriteShinyFront)
+            Glide.with(requireContext()).load(pokemon.images.shinyBack).centerInside()
+                .into(imgSpriteShinyBack)
         }
     }
 

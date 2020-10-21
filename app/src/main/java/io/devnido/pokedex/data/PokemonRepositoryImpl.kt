@@ -20,7 +20,7 @@ class PokemonRepositoryImpl @Inject constructor(
     private val pokemonDao: PokemonDao
 ) : PokemonRepository {
 
-    private val itemsPerPage = 251
+    private val itemsPerPage = 700
 
     override suspend fun getPokemonList(): List<Pokemon> {
 

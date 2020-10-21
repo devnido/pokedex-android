@@ -60,6 +60,7 @@ class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         initObservers()
+        pokemonViewModel.initPokemonList()
     }
 
     private fun initObservers(){

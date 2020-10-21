@@ -27,6 +27,8 @@ class PokeApiRequests @Inject constructor(private val pokeApiService: PokeApiSer
 
         val response = pokeApiService.getPokemonDetail(number)
 
+        Log.d("TAG_POKEMON_RESPONSE",response.body().toString())
+
         // TODO: validar que el request fue exitoso, en caso contrario lanzar un error personalizado
 
         return response.body()!!
