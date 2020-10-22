@@ -7,8 +7,8 @@ import io.devnido.pokedex.di.modules.BinderModule
 import io.devnido.pokedex.di.modules.DbModule
 import io.devnido.pokedex.di.modules.NetworkModule
 import io.devnido.pokedex.di.modules.RepositoryModule
-import io.devnido.pokedex.ui.DetailFragment
-import io.devnido.pokedex.ui.ListFragment
+import io.devnido.pokedex.ui.detail.DetailFragment
+import io.devnido.pokedex.ui.list.ListFragment
 import io.devnido.pokedex.ui.MainActivity
 import javax.inject.Singleton
 

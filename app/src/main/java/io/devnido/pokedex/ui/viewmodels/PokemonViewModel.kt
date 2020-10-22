@@ -1,5 +1,6 @@
 package io.devnido.pokedex.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.*
 import io.devnido.pokedex.domain.usecases.GetPokemonUseCase
 import io.devnido.pokedex.domain.usecases.GetPokemonsUseCase
@@ -7,22 +8,24 @@ import io.devnido.pokedex.domain.entities.Pokemon
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-
 class PokemonViewModel @Inject constructor(
     private val getPokemonsUseCase: GetPokemonsUseCase,
     private val getPokemonUseCase: GetPokemonUseCase
     ) : ViewModel() {
 
     private val _pokemonList = MutableLiveData<List<Pokemon>>()
-    private val _selectedPokemon = MutableLiveData<Pokemon>()
+    private val _pokemon = MutableLiveData<Pokemon>()
     private val _loading = MutableLiveData(true)
     private val _errorMessage = MutableLiveData<String>()
 
     val pokemonList: LiveData<List<Pokemon>> get() = _pokemonList
-    val selectedPokemon: LiveData<Pokemon> get() = _selectedPokemon
+    val pokemon: LiveData<Pokemon> get() = _pokemon
     val loading: LiveData<Boolean> get() = _loading
     val errorMessage: LiveData<String> get() = _errorMessage
 
+    fun setPokemon(pokemon: Pokemon){
+        _pokemon.value = pokemon
+    }
 
     fun initPokemonList(){
         viewModelScope.launch {
@@ -44,8 +47,8 @@ class PokemonViewModel @Inject constructor(
             _loading.value = true
             withContext(Dispatchers.IO){
                 try {
-                    val pokemon = getPokemonUseCase(id)
-                    _selectedPokemon.postValue(pokemon)
+                    Log.d("TAG_POKEMON_DETAIL", id.toString())
+                    _pokemon.postValue(getPokemonUseCase(id))
                 }catch (e: Exception){
                     _errorMessage.postValue(e.message)
                 }finally {

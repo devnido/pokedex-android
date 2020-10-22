@@ -1,4 +1,4 @@
-package io.devnido.pokedex.ui
+package io.devnido.pokedex.ui.list
 
 import android.content.Context
 import android.os.Bundle
@@ -17,10 +17,11 @@ import io.devnido.pokedex.domain.entities.Pokemon
 import io.devnido.pokedex.ui.viewmodels.PokemonViewModel
 import io.devnido.pokedex.core.hide
 import io.devnido.pokedex.core.show
+import io.devnido.pokedex.ui.MainActivity
 import javax.inject.Inject
 import javax.inject.Provider
 
-class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
+class ListFragment : Fragment(), PokemonListAdapter.OnPokemonClickListener {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -87,11 +88,11 @@ class ListFragment : Fragment(),PokemonListAdapter.OnPokemonClickListener {
     }
 
     private fun setAdapter(pokemonList:List<Pokemon>){
-        binding.recyclerviewPokemon.adapter = PokemonListAdapter(requireContext(), pokemonList, this)
+        binding.recyclerviewPokemon.adapter = PokemonListAdapter( pokemonList, this)
         binding.recyclerviewPokemon.adapter?.notifyDataSetChanged()
     }
 
-    override fun onPokemonClick(pokemon: Pokemon, position: Int) {
+    override fun onPokemonClick(pokemon: Pokemon) {
 
         val action = ListFragmentDirections.actionListFragmentToDetailFragment(pokemon)
 

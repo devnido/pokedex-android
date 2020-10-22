@@ -7,8 +7,9 @@ import io.devnido.pokedex.BaseApplication
 import io.devnido.pokedex.R
 import io.devnido.pokedex.di.components.AppComponent
 import io.devnido.pokedex.domain.entities.Pokemon
+import io.devnido.pokedex.ui.list.PokemonListAdapter
 
-class MainActivity : AppCompatActivity(),PokemonListAdapter.OnPokemonClickListener {
+class MainActivity : AppCompatActivity() {
 
 
     lateinit var appComponent: AppComponent
@@ -25,7 +26,5 @@ class MainActivity : AppCompatActivity(),PokemonListAdapter.OnPokemonClickListen
 
     }
 
-    override fun onPokemonClick(pokemon: Pokemon, position: Int) {
-        Log.d("TAG_POKEMON",pokemon.name)
-    }
+
 }

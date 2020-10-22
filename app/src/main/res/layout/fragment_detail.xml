@@ -1,76 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="io.devnido.pokedex.ui.viewmodels.PokemonViewModel" />
+
+        <import type="android.view.View"/>
+
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.DetailFragment">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/img_pokemon"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:contentDescription="@string/imagen_del_pokemon"
-            tools:src="@drawable/bg_pokemon_app"
-            tools:scaleType="centerCrop"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/txt_name_pokemon"
-                android:layout_marginStart="10dp"
-                android:textAllCaps="true"
-                android:layout_alignParentStart="true"
-                style="@style/TitleDetail"
-                tools:text="PIKACHU" />
-            <TextView
-                android:id="@+id/txt_id_pokemon"
-                style="@style/TitleDetail"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                tools:text="#25" />
-        </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/progress_detail_info"
-            android:padding="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
         <LinearLayout
-            android:id="@+id/container_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            tools:context=".ui.detail.DetailFragment">
 
-            <include
-                android:id="@+id/container_pokemon_types"
-                layout="@layout/detail_pokemon_types"/>
+            <ImageView
+                android:id="@+id/img_pokemon"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="@string/imagen_del_pokemon"
+                app:setImageUrl="@{viewmodel.pokemon.images.large}"
+                tools:src="@drawable/bg_pokemon_app"
+                tools:scaleType="centerCrop" />
 
-            <include
-                android:id="@+id/container_pokemon_info"
-                layout="@layout/detail_pokemon_info"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <include
-                android:id="@+id/container_pokemon_chart"
-                layout="@layout/detail_pokemon_chart"/>
+                <TextView
+                    android:id="@+id/txt_name_pokemon"
+                    android:layout_marginStart="10dp"
+                    android:text="@{viewmodel.pokemon.name}"
+                    android:textAllCaps="true"
+                    android:layout_alignParentStart="true"
+                    style="@style/TitleDetail"
+                    tools:text="PIKACHU" />
 
-            <include
-                android:id="@+id/container_pokemon_sprites"
-                layout="@layout/detail_pokemon_sprites"/>
+                <TextView
+                    android:id="@+id/txt_id_pokemon"
+                    style="@style/TitleDetail"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:text="@{`# `+viewmodel.pokemon.id}"
+                    tools:text="#25" />
+            </RelativeLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_detail_info"
+                android:padding="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewmodel.loading? View.VISIBLE : View.GONE }" />
+
+            <LinearLayout
+                android:id="@+id/container_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:visibility="@{viewmodel.loading? View.GONE : View.VISIBLE }">
+
+                <include
+                    android:id="@+id/container_pokemon_types"
+                    layout="@layout/detail_pokemon_types"
+                    bind:viewmodel="@{viewmodel}"/>
+
+                <include
+                    android:id="@+id/container_pokemon_info"
+                    layout="@layout/detail_pokemon_info"
+                    bind:viewmodel="@{viewmodel}"/>
+
+                <include
+                    android:id="@+id/container_pokemon_chart"
+                    android:visibility="@{viewmodel.pokemon.stats != null ? View.VISIBLE : View.GONE }"
+                    layout="@layout/detail_pokemon_chart"
+                    bind:viewmodel="@{viewmodel}"/>
+
+                <include
+                    android:id="@+id/container_pokemon_sprites"
+                    layout="@layout/detail_pokemon_sprites"
+                    bind:viewmodel="@{viewmodel}" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
-
-
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</layout>
 

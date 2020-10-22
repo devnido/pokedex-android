@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout>
+    <data>
+        <variable
+            name="viewmodel"
+            type="io.devnido.pokedex.ui.viewmodels.PokemonViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_detail_pokemon_info"
@@ -18,43 +23,46 @@
 
         <TextView
             android:id="@+id/info_order"
+            style="@style/InfoValue"
             android:layout_weight="1"
-            app:layout_constraintTop_toBottomOf="@id/title_info_order"
+            android:text="@{String.valueOf(viewmodel.pokemon.order)}"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="25"
-            style="@style/InfoValue" />
+            app:layout_constraintTop_toBottomOf="@id/title_info_order"
+            tools:text="25" />
 
         <TextView
             android:id="@+id/title_info_weight"
+            style="@style/InfoTitle"
             android:layout_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/info_order"
             android:text="Weight"
-            style="@style/InfoTitle" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_order" />
 
         <TextView
             android:id="@+id/info_weight"
+            style="@style/InfoValue"
             android:layout_weight="1"
-            tools:text="6 kg"
+            android:text="@{viewmodel.pokemon.weight + ` kg`}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_info_weight"
-            style="@style/InfoValue" />
+            tools:text="6 kg" />
 
         <TextView
             android:id="@+id/title_info_abilities"
+            style="@style/InfoTitle"
             android:layout_weight="2"
             android:text="Abilities"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/info_weight"
-            style="@style/InfoTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/info_weight" />
 
         <TextView
             android:id="@+id/info_abilities"
+            style="@style/InfoValue"
             android:layout_weight="2"
-            tools:text="Static, Lightning-Rod"
+            app:setAbilitiesText="@{viewmodel.pokemon.abilities}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_info_abilities"
-            style="@style/InfoValue" />
+            tools:text="Static, Lightning-Rod" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -66,37 +74,43 @@
         <TextView
             android:id="@+id/title_info_exp_baser"
             style="@style/InfoTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline"
             android:layout_marginStart="15dp"
-            android:text="Base Exp" />
+            android:text="Base Exp"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/info_exp_base"
-            android:layout_weight="1"
-            app:layout_constraintTop_toBottomOf="@id/title_info_exp_baser"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            style="@style/InfoValue"
             android:layout_marginStart="15dp"
-            tools:text="112"
-            style="@style/InfoValue"  />
+            android:layout_weight="1"
+            android:text="@{String.valueOf(viewmodel.pokemon.baseExperience)}"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/title_info_exp_baser"
+            tools:text="112" />
 
         <TextView
             android:id="@+id/title_info_height"
+            style="@style/InfoTitle"
+            android:layout_marginStart="15dp"
             android:layout_weight="1"
             android:text="Height"
-            app:layout_constraintTop_toBottomOf="@id/info_exp_base"
             app:layout_constraintStart_toStartOf="@id/guideline"
-            android:layout_marginStart="15dp"
-            style="@style/InfoTitle" />
+            app:layout_constraintTop_toBottomOf="@id/info_exp_base" />
 
         <TextView
             android:id="@+id/info_height"
-            android:layout_weight="1"
-            tools:text="0.4 m"
-            app:layout_constraintTop_toBottomOf="@id/title_info_height"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            style="@style/InfoValue"
             android:layout_marginStart="15dp"
-            style="@style/InfoValue"  />
+            android:layout_weight="1"
+            android:text="@{viewmodel.pokemon.height + ` m`}"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/title_info_height"
+            tools:text="0.4 m" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</layout>
 
